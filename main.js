@@ -2,6 +2,7 @@ import { Box } from "./js/Box";
 import { Gun } from "./js/Gun";
 import { ParticleSystem } from "./js/Particles";
 import { PickableItem } from "./js/PickableItem";
+import { PlatformsManager } from "./js/Platforms";
 import { ele } from "./js/utils";
 import "./style.css";
 
@@ -12,6 +13,7 @@ const c = canvas.getContext("2d");
 
 let BULLET_COUNT = 50;
 let bullets_counter = ele("count");
+
 
 const floor = new Box({ x: 0, y: canvas.height - 80 });
 floor.size = { x: canvas.width, y: 80 };
@@ -32,14 +34,14 @@ gun.render(c);
 const collectabe = new PickableItem({ x: 300, y: floor.pos.y - 25 });
 collectabe.render(c);
 
+const _PlatformsManager = new PlatformsManager()
+_PlatformsManager.init()
+
 const particleSystem = new ParticleSystem({ x: player.pos.x, y: player.pos.y });
 particleSystem.init(c);
-particleSystem.pause();
+particleSystem.pause(c)
 
 let isPLayerGrounded = false;
-if (isPLayerGrounded == true) {
-  particleSystem.play(c);
-}
 const loop = () => {
   c.fillStyle = "#333";
   c.fillRect(0, 0, canvas.width, canvas.height);
@@ -50,6 +52,20 @@ const loop = () => {
   gun.update(c);
   particleSystem.update(c);
   collectabe.update(c);
+
+  if (isPLayerGrounded == true) {
+    particleSystem.pause(c);
+  }else{
+    particleSystem.play(c)
+    particleSystem.randomness.x = 0
+    particleSystem.randomness.y = 10
+    particleSystem.amount = "0.000001"
+    particleSystem.gravity = 5
+    particleSystem.glow = 80
+    particleSystem.color = "#2ff7ea"
+  }
+
+particleSystem.pos = {x:player.pos.x, y:player.pos.y + player.size.y}
 
   bullets_counter.innerText = BULLET_COUNT;
 

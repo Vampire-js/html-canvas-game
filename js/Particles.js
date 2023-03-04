@@ -7,11 +7,13 @@ function floor(e){
 export class ParticleSystem{
     constructor(pos = {x:0,y:0}){
         this.amount = 0.2
-        this.randomness = {x:20,y:3}
-        this.size = {x:50 , y:50}
+        this.randomness = {x:2,y:2}
+        this.size = {x:20 , y:2}
+        this.glow = 2
         this.gravity = 2
         this.velocity = {x:0 ,y:0}
         this.particles = new Array()
+        this.color = "#eeeeeee"
         this.pos ={x:pos.x , y:pos.y}
     }
     init(c){
@@ -22,6 +24,7 @@ export class ParticleSystem{
         }
     }
     play(c){
+        this.amount = 0.2
         this.init(c)
     }
     pause(){
@@ -33,7 +36,9 @@ export class ParticleSystem{
             particle.velocity.x = floor(this.randomness.x)
             particle.velocity.y = floor(this.randomness.y)
             particle.velocity.y += this.gravity
-            particle.size = {x:5 ,y:5}
+            particle.size = {x:this.size.x ,y:this.size.y}
+            particle.color = this.color
+            particle.glow = this.glow
             particle.update(c)
         })
     }

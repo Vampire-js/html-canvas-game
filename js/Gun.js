@@ -20,7 +20,7 @@ export class Gun {
   
       this.bullets.map((bullet) => {
         bullet.size = { x: 13, y: 13 };
-        bullet.color = "#03fcf0"
+        bullet.color = "#aeff00"
         bullet.glow = 30
       });
 
