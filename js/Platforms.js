@@ -6,14 +6,15 @@ export class PlatformsManager {
     add(e){
         this.PLATFORMS.push(e)
     }
-    init(){
+    init(e){
         this.PLATFORMS.map(platform => {
-            platform.render()
+            platform.render(e)
         })
     }
-    update(){
+    update(e){
         this.PLATFORMS.map(plat => {
-            plat.update()
+            plat.size = {x:200 , y:30}
+            plat.update(e)
         })
     }
 }

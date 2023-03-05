@@ -11,7 +11,7 @@ export class PickableItem{
     render(c){
         this.object = new Box({x:this.pos.x , y:this.pos.y})
         this.object.color = this.color
-        this.object.glow = 30
+        this.object.glow = 20
         this.object.size = {x:10,y:20}
         this.object.render(c)
     }

@@ -8,7 +8,9 @@ export class ParticleSystem{
     constructor(pos = {x:0,y:0}){
         this.amount = 0.2
         this.randomness = {x:2,y:2}
-        this.size = {x:20 , y:2}
+        this.size = {x:2 , y:2}
+        this.range = {x:10 , y:10}
+        this.isFinite = false
         this.glow = 2
         this.gravity = 2
         this.velocity = {x:0 ,y:0}
@@ -18,8 +20,8 @@ export class ParticleSystem{
     }
     init(c){
         for(let i = 0; i<this.amount; i++){
-            this.particles.push(new Box({x:floor(this.size.x)+this.pos.x, y:floor(this.size.y) + this.pos.y}))
-        
+            this.particles.push(new Box({x:floor(this.range.x)+this.pos.x, y:floor(this.range.y) + this.pos.y}))
+            
             this.particles[i].render(c)
         }
     }
@@ -32,7 +34,18 @@ export class ParticleSystem{
     }
     update(c){
         this.init(c)
+
+        if(this.isFinite){
+        for(let i = 0; i<this.particles.length ; i++){
+            if(this.particles[i].pos.y >= this.pos.y + this.range.y){
+                this.particles.splice(i+1 , 1)
+            }
+        }
+    }
+
         this.particles.map(particle => {
+
+
             particle.velocity.x = floor(this.randomness.x)
             particle.velocity.y = floor(this.randomness.y)
             particle.velocity.y += this.gravity
@@ -41,5 +54,7 @@ export class ParticleSystem{
             particle.glow = this.glow
             particle.update(c)
         })
+
+        
     }
 }
