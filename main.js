@@ -1,7 +1,7 @@
 import { Box } from "./js/Box";
 import { Gun } from "./js/Gun";
 import { ParticleSystem } from "./js/Particles";
-import { PickableItem } from "./js/PickableItem";
+import { PickableItemsManager } from "./js/PickableItem";
 import { PlatformsManager } from "./js/Platforms";
 import { ele } from "./js/utils";
 import "./style.css";
@@ -32,7 +32,7 @@ const gun = new Gun({ x: 0, y: 0 });
 gun.glow = 20;
 gun.render(c);
 
-const collectabe = new PickableItem({ x: 300, y: floor.pos.y - 25 });
+const collectabe = new PickableItemsManager({ x: 300, y: floor.pos.y - 25 });
 collectabe.render(c);
 
 const _PlatformsManager = new PlatformsManager();
@@ -47,6 +47,7 @@ level.platforms.map(e => {
 })
 
 let isPLayerGrounded = false;
+UIManager({main_menu:ele("main_menu") , levels_menu:ele("levels_menu")})
 const loop = () => {
   c.fillStyle = "#333";
   c.fillRect(0, 0, canvas.width, canvas.height);
@@ -58,7 +59,15 @@ const loop = () => {
   particleSystem.update(c);
   collectabe.update(c);
   _PlatformsManager.update(c)
-  UIManager({main_menu:ele("main_menu")})
+
+
+  for(let i = 0; i<_PlatformsManager.PLATFORMS.length ; i++){
+    let platform = _PlatformsManager.PLATFORMS[i]
+    if(player.pos.y + player.size.y + player.velocity.y >= platform.pos.y && player.pos.x +player.size.x >= platform.pos.x && player.pos.x <= platform.pos.x + platform.size.x && player.pos.y + player.velocity.y <= platform.pos.y  ){
+      isPLayerGrounded = true
+      player.velocity.y = 0
+    }
+  }
 
   if (isPLayerGrounded == true) {
     particleSystem.pause(c);
@@ -83,9 +92,13 @@ const loop = () => {
 
   if (player.pos.y + player.size.y + player.velocity.y >= floor.pos.y) {
     isPLayerGrounded = true;
-    player.velocity.y = 0;
+    
   } else {
     isPLayerGrounded = false;
+  }
+
+  if(isPLayerGrounded){
+    player.velocity.y = 0;
   }
 
   //player controls
@@ -95,9 +108,8 @@ const loop = () => {
         player.velocity.x = 5;
         break;
       case "w":
-        if (isPLayerGrounded) {
           player.velocity.y = -10;
-        }
+        
         break;
       case "a":
         player.velocity.x = -5;

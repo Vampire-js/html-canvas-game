@@ -1,12 +1,13 @@
 import { Box } from "./Box";
 import { interpolate } from "./utils";
 
-export class PickableItem{
+export class PickableItemsManager{
     constructor(pos = {x:0 , y:0}){
         this.pos = {x:pos.x , y:pos.y}
         this.isPicked = false
         this.color = "#0aff64"
         this.object = null
+        this.items = new Array()
     }
     render(c){
         this.object = new Box({x:this.pos.x , y:this.pos.y})
